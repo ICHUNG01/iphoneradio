@@ -4,12 +4,14 @@ from pyodide.ffi import create_proxy
 
 # 網路電台串流：SomaFM 公開提供的 128 kbps MP3 串流
 STATIONS = [
-    {"name": "中廣新聞網", "desc": "新聞與時事", "url": "https://stream.rcs.revma.com/78fm9wyy2tzuv"},
+    {"name": "ICRT FM100", "desc": "英文新聞與流行音樂","url": "https://live.leanstream.co/ICRTFM-MP3"},
     {"name": "中廣流行網", "desc": "I like radio · 流行與談話", "url": "https://stream.rcs.revma.com/aw9uqyxy2tzuv"},
+    {"name": "中廣新聞網", "desc": "新聞與時事", "url": "https://stream.rcs.revma.com/78fm9wyy2tzuv"},
     {"name": "中廣音樂網", "desc": "i Radio · 流行音樂", "url": "https://stream.rcs.revma.com/ndk05tyy2tzuv"},
     {"name": "警廣全國交通網", "desc": "交通路況與治安資訊", "url": "https://stream.pbs.gov.tw/live/PBS/playlist.m3u8"},
     {"name": "警廣臺中分臺", "desc": "臺中地區廣播", "url": "https://stream.pbs.gov.tw/live/TCS/playlist.m3u8"},
     {"name": "Hit FM 線上收聽", "desc": "點下方連結開啟官方播放器", "url": None, "website": "https://www.hitfm.com.tw/mobile/onair.php"},
+   
 ]
 
 
