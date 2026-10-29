@@ -4,7 +4,7 @@ from pyodide.ffi import create_proxy
 
 # 網路電台串流：SomaFM 公開提供的 128 kbps MP3 串流
 STATIONS = [
-    {"name": "ICRT FM100", "desc": "英文新聞與流行音樂","url": "url": "https://stream.rcs.revma.com/nkdfurztxp3vv"},
+    {"name": "ICRT FM100", "desc": "英文新聞與流行音樂", "url": "https://stream.rcs.revma.com/nkdfurztxp3vv"},
     {"name": "中廣音樂網", "desc": "i Radio · 流行音樂", "url": "https://stream.rcs.revma.com/ndk05tyy2tzuv"},
     {"name": "中廣流行網", "desc": "I like radio · 流行與談話", "url": "https://stream.rcs.revma.com/aw9uqyxy2tzuv"},
     {"name": "中廣新聞網", "desc": "新聞與時事", "url": "https://stream.rcs.revma.com/78fm9wyy2tzuv"},
