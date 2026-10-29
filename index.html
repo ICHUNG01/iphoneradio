@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101427">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="我的收音機">
+  <title>我的 iPhone 收音機</title>
+  <link rel="stylesheet" href="https://pyscript.net/releases/2025.3.1/core.css">
+  <script type="module" src="https://pyscript.net/releases/2025.3.1/core.js"></script>
+  <style>
+    :root {font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC",sans-serif;color:#f8fafc;background:#101427}
+    * {box-sizing:border-box} body{margin:0;min-height:100dvh;background:radial-gradient(circle at 50% 0,#293763,#101427 60%)}
+    main{width:min(100%,460px);margin:auto;padding:calc(env(safe-area-inset-top) + 40px) 24px calc(env(safe-area-inset-bottom) + 36px);text-align:center}
+    .eyebrow{letter-spacing:.22em;font-size:12px;color:#a5b4fc;font-weight:700}h1{font-size:34px;margin:14px 0 28px}
+    .dial{width:230px;height:230px;border-radius:50%;margin:0 auto 25px;display:grid;place-items:center;background:linear-gradient(145deg,#424f89,#171d3c);border:7px solid #5d6ca8;box-shadow:0 20px 60px #050718a8,inset 0 3px 18px #b8c4ff32}
+    .dial-inner{font-size:74px}.station{font-size:27px;font-weight:750;margin:12px 0 7px}.description{color:#c3c9e0;min-height:25px;font-size:14px}
+    #status{color:#c4b5fd;min-height:24px;margin-top:12px;font-size:14px}
+    .controls{display:flex;align-items:center;justify-content:center;gap:26px;margin:20px 0 32px}
+    button{touch-action:manipulation;cursor:pointer;border:0;color:white;background:#394368;border-radius:100px;font-size:25px;width:60px;height:60px}
+    #play{width:86px;height:86px;font-size:34px;background:#8b5cf6;box-shadow:0 10px 28px #8b5cf655}
+    .panel{background:#ffffff0c;border:1px solid #ffffff1c;border-radius:22px;text-align:left;padding:20px;margin-top:18px}
+    label{display:block;font-size:14px;font-weight:650;margin-bottom:12px;color:#d8def3}
+    select,input{width:100%;border:1px solid #596181;border-radius:12px;background:#202943;color:white;padding:13px 12px;font-size:16px}
+    input[type=range]{padding:0;accent-color:#a78bfa} .muted{color:#aab3d1;font-size:12px;line-height:1.6}
+    audio{display:none}
+  </style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">LIVE RADIO</div><h1>我的收音機</h1>
+  <div class="dial"><div class="dial-inner">📻</div></div>
+  <div id="station-name" class="station">Groove Salad</div>
+  <div id="station-desc" class="description">輕鬆電音 / Downtempo</div>
+  <div id="status" aria-live="polite">正在載入 Python…</div>
+  <div class="controls">
+    <button id="prev" aria-label="上一台">⏮</button>
+    <button id="play" aria-label="播放或暫停">▶</button>
+    <button id="next" aria-label="下一台">⏭</button>
+  </div>
+  <section class="panel"><label for="stations">選擇電台</label><select id="stations"></select></section>
+  <section class="panel"><label for="volume">音量（iPhone 上也可以使用音量鍵）</label><input id="volume" type="range" min="0" max="100" value="80"><p class="muted">部分 iPhone 瀏覽器不支援網頁調整音量，請使用手機實體音量鍵。</p></section>
+  <section class="panel"><label for="custom">自訂電台 MP3 / AAC 串流網址</label><input id="custom" type="url" placeholder="https://example.com/live.mp3"><button id="add" style="width:100%;height:48px;font-size:16px;border-radius:12px;margin-top:12px;background:#525d91">加入電台</button><p class="muted">網址須為 HTTPS 且能由 Safari 直接播放的串流；不是一般電台首頁網址。</p></section>
+  <audio id="audio" preload="none" playsinline></audio>
+  <p class="muted">需要網路連線 · 第一次播放請手動點擊 ▶</p>
+</main>
+<script type="py" src="./main.py" config='{"packages": []}'></script>
+</body>
+</html>
