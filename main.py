@@ -4,11 +4,14 @@ from pyodide.ffi import create_proxy
 
 # 網路電台串流：SomaFM 公開提供的 128 kbps MP3 串流
 STATIONS = [
-    {"name": "Groove Salad", "desc": "輕鬆電音 / Downtempo", "url": "https://ice2.somafm.com/groovesalad-128-mp3"},
-    {"name": "Drone Zone", "desc": "氛圍音樂 / Ambient", "url": "https://ice2.somafm.com/dronezone-128-mp3"},
-    {"name": "Deep Space One", "desc": "宇宙氛圍 / Space Ambient", "url": "https://ice2.somafm.com/deepspaceone-128-mp3"},
-    {"name": "Secret Agent", "desc": "間諜電影配樂 / Lounge", "url": "https://ice2.somafm.com/secretagent-128-mp3"},
+    {"name": "中廣新聞網", "desc": "新聞與時事", "url": "https://stream.rcs.revma.com/78fm9wyy2tzuv"},
+    {"name": "中廣流行網", "desc": "I like radio · 流行與談話", "url": "https://stream.rcs.revma.com/aw9uqyxy2tzuv"},
+    {"name": "中廣音樂網", "desc": "i Radio · 流行音樂", "url": "https://stream.rcs.revma.com/ndk05tyy2tzuv"},
+    {"name": "警廣全國交通網", "desc": "交通路況與治安資訊", "url": "https://stream.pbs.gov.tw/live/PBS/playlist.m3u8"},
+    {"name": "警廣臺中分臺", "desc": "臺中地區廣播", "url": "https://stream.pbs.gov.tw/live/TCS/playlist.m3u8"},
+    {"name": "Hit FM 線上收聽", "desc": "點下方連結開啟官方播放器", "url": None, "website": "https://www.hitfm.com.tw/mobile/onair.php"},
 ]
+
 
 index = 0
 playing = False
@@ -18,6 +21,7 @@ desc_label = document.getElementById("station-desc")
 status_label = document.getElementById("status")
 play_button = document.getElementById("play")
 selector = document.getElementById("stations")
+external_link = document.getElementById("external-link")
 
 
 def status(message):
@@ -38,6 +42,11 @@ def show_station():
     name_label.textContent = current["name"]
     desc_label.textContent = current["desc"]
     selector.value = str(index)
+    if current.get("website"):
+        external_link.href = current["website"]
+        external_link.style.display = "block"
+    else:
+        external_link.style.display = "none"
 
 
 def stop():
@@ -51,13 +60,19 @@ def stop():
 def start():
     global playing
     current = STATIONS[index]
+    if not current.get("url"):
+        status("此電台使用官方網站播放，請點下方連結")
+        return
     if audio.src != current["url"]:
         audio.src = current["url"]
     status("正在連線…")
     try:
         # browser audio.play() 回傳 Promise；如失敗會由 error event 顯示提示
         promise = audio.play()
-        promise.catch(create_proxy(lambda err: status("播放失敗，請檢查串流網址或網路")))
+        # 留存 proxy，避免 Pyodide 回收非同步錯誤處理器
+        reject_handler = create_proxy(lambda err: status("播放失敗，請檢查串流網址或網路"))
+        handlers.append(reject_handler)
+        promise.catch(reject_handler)
         playing = True
         play_button.textContent = "⏸"
     except Exception:
@@ -84,11 +99,13 @@ def on_play(event):
 
 
 def on_prev(event):
-    choose(index - 1, autoplay=not audio.paused)
+    was_playing = not audio.paused
+    choose(index - 1, autoplay=was_playing)
 
 
 def on_next(event):
-    choose(index + 1, autoplay=not audio.paused)
+    was_playing = not audio.paused
+    choose(index + 1, autoplay=was_playing)
 
 
 def on_select(event):
@@ -108,7 +125,7 @@ def on_add(event):
     if not url.startswith("https://"):
         status("請輸入以 https:// 開頭的串流網址")
         return
-    STATIONS.append({"name": f"自訂電台 {len(STATIONS) - 3}", "desc": "自訂網路串流", "url": url})
+    STATIONS.append({"name": f"自訂電台 {len(STATIONS) - 5}", "desc": "自訂網路串流", "url": url})
     fill_selector()
     choose(len(STATIONS) - 1)
     document.getElementById("custom").value = ""
@@ -118,7 +135,7 @@ def on_error(event):
     global playing
     playing = False
     play_button.textContent = "▶"
-    status("串流連線失敗，請切換電台或檢查網路")
+    status("串流連線失敗，請切換電台或開啟官方播放器")
 
 
 # 保留代理物件參照，避免 Python callback 被回收
